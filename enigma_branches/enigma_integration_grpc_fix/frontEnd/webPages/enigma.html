@@ -1,0 +1,403 @@
+<!--  HTML for enigma front-end, using JavaScript from ../javaScriptFiles/enigma.js and CSS from ../styleSheets/enigma.css
+      Authors:  Gabriel Fredrerichs, Nic Leighty
+      Date:     Version 3.0 (Sprint 3) 
+-->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Enigma Emulator</title>
+    <meta charset="UTF-8" />
+    <script src="../javaScriptFiles/enigma.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/jquery.marquee@1.6.0/jquery.marquee.min.js"
+      type="text/javascript"
+    ></script>
+    <link href="../styleSheets/enigma.css" rel="stylesheet" type="text/css" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+  </head>
+  <body>
+    <!-- Overlay and login form. The DOM will load this first! -->
+    <div class="overlay" id="overlay">
+      <div class="login-container">
+        <h2>Login</h2>
+        <h5><em>Do not include sensitive information!</em></h5>
+        <label for="username">Username:</label>
+        <input
+          autocomplete="off"
+          type="text"
+          id="username"
+          name="username"
+          class=""
+        />
+
+        <label for="password">Password:</label>
+        <input
+          autocomplete="off"
+          type="password"
+          id="password"
+          name="password"
+          class=""
+        />
+
+        <button type="submit" onclick="submitLogin()">
+          Create Account / Login
+        </button>
+      </div>
+    </div>
+
+    <!-- Table used to divide the UI in 3 equal parts -->
+    <table id="ui-table" style="width: 100%; height: 90vh">
+      <thead>
+        <th>Enigma Configuration</th>
+        <th style="font-size: 2rem">ENIGMA VISUALIZER</th>
+        <th>Previously Saved Messages w/ Configs</th>
+      </thead>
+      <tr>
+        <!-- Left Pane for rotor configuration -->
+        <td class="left pane">
+          <div
+            id="leftOverlay"
+            class="columnOverlay"
+            style="display: none"
+          ></div>
+
+          <!-- div for the rotor (and ring) area in the left pane
+               covers the ring setting, rotor start positions, rotor ordering
+          -->
+          <div id="rotorArea">
+            <!-- table container for the ring setting,
+                 rotor start positions, rotor ordering
+            -->
+            <table>
+              <!-- Row for ring settings
+                   Each td is for the respective ring setting
+              -->
+              <tr>
+                <td>
+                  <div id="leftRingSetting" class="ringSetting">
+                    <span
+                      id="leftRingSettingIncrement"
+                      class="material-symbols-outlined"
+                    >
+                      arrow_upward
+                    </span>
+                    <span id="leftRingSettingValue">01</span>
+                    <span
+                      id="leftRingSettingDecrement"
+                      class="material-symbols-outlined"
+                    >
+                      arrow_downward
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <div id="middleRingSetting" class="ringSetting">
+                    <span
+                      id="middleRingSettingIncrement"
+                      class="material-symbols-outlined"
+                    >
+                      arrow_upward
+                    </span>
+                    <span id="middleRingSettingValue">01</span>
+                    <span
+                      id="middleRingSettingDecrement"
+                      class="material-symbols-outlined"
+                    >
+                      arrow_downward
+                    </span>
+                  </div>
+                </td>
+                <td>
+                  <div id="rightRingSetting" class="ringSetting">
+                    <span
+                      id="rightRingSettingIncrement"
+                      class="material-symbols-outlined"
+                    >
+                      arrow_upward
+                    </span>
+                    <span id="rightRingSettingValue">01</span>
+                    <span
+                      id="rightRingSettingDecrement"
+                      class="material-symbols-outlined"
+                    >
+                      arrow_downward
+                    </span>
+                  </div>
+                </td>
+              </tr>
+
+              <!-- Increment controls for setting rotor start positions -->
+              <tr>
+                <td id="plus1" onclick="plusRotor(this)">+</td>
+                <td id="plus2" onclick="plusRotor(this)">+</td>
+                <td id="plus3" onclick="plusRotor(this)">+</td>
+              </tr>
+
+              <!-- Row of rotors (that are draggable for selecting rotor order)
+                   Note that the 3rd tr for each rotor makes up the representation
+                   of what is seen in the viewport of a physical enigma machine
+              -->
+              <!-- TODO: make dragging them visually (and logically) adjust the rotor order -->
+              <tr>
+                <!-- Each table within each of these tds is a visual rotor
+                     Then within each of these tables are trs with tds
+                     holding the numbers on the respective rotor
+                -->
+                <td>
+                  <table
+                    class="rotor"
+                    id="rotor1"
+                    draggable="true"
+                    ondragstart="rotorDrag(event)"
+                  >
+                    <caption>
+                      Rotor 1
+                    </caption>
+                    <tr>
+                      <td>03</td>
+                    </tr>
+                    <tr>
+                      <td>02</td>
+                    </tr>
+                    <tr>
+                      <td style="background-color: lightgray">01</td>
+                    </tr>
+                    <tr>
+                      <td>26</td>
+                    </tr>
+                    <tr>
+                      <td>25</td>
+                    </tr>
+                  </table>
+                </td>
+                <td>
+                  <table
+                    class="rotor"
+                    id="rotor2"
+                    draggable="true"
+                    ondragstart="rotorDrag(event)"
+                  >
+                    <caption>
+                      Rotor 2
+                    </caption>
+                    <tr>
+                      <td>03</td>
+                    </tr>
+                    <tr>
+                      <td>02</td>
+                    </tr>
+                    <tr>
+                      <td style="background-color: lightgray">01</td>
+                    </tr>
+                    <tr>
+                      <td>26</td>
+                    </tr>
+                    <tr>
+                      <td>25</td>
+                    </tr>
+                  </table>
+                </td>
+                <td>
+                  <table
+                    class="rotor"
+                    id="rotor3"
+                    draggable="true"
+                    ondragstart="rotorDrag(event)"
+                  >
+                    <caption>
+                      Rotor 3
+                    </caption>
+                    <tr>
+                      <td>03</td>
+                    </tr>
+                    <tr>
+                      <td>02</td>
+                    </tr>
+                    <tr>
+                      <td style="background-color: lightgray">01</td>
+                    </tr>
+                    <tr>
+                      <td>26</td>
+                    </tr>
+                    <tr>
+                      <td>25</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+              <!-- Decrement controls for setting rotor start positions -->
+              <tr>
+                <td id="minus1" onclick="minusRotor(this)">-</td>
+                <td id="minus2" onclick="minusRotor(this)">-</td>
+                <td id="minus3" onclick="minusRotor(this)">-</td>
+              </tr>
+            </table>
+          </div>
+
+          <!-- The interactive plugboard, which is represented by a table
+               (Each tr is a row on the plugboard, and then each td within
+               holds a letter on said plugboard
+          -->
+          <div>
+            <table id="plugboard">
+              <tr>
+                <td>Q</td>
+                <td>W</td>
+                <td>E</td>
+                <td>R</td>
+                <td>T</td>
+                <td>Z</td>
+                <td>U</td>
+                <td>I</td>
+                <td>O</td>
+              </tr>
+              <tr>
+                <td>A</td>
+                <td>S</td>
+                <td>D</td>
+                <td>F</td>
+                <td>G</td>
+                <td>H</td>
+                <td>J</td>
+                <td>K</td>
+              </tr>
+              <tr>
+                <td>P</td>
+                <td>Y</td>
+                <td>X</td>
+                <td>C</td>
+                <td>V</td>
+                <td>B</td>
+                <td>N</td>
+                <td>M</td>
+                <td>L</td>
+              </tr>
+            </table>
+          </div>
+
+          <!-- Spacing between plugboard and confirmConfig button below -->
+          <br /><br />
+
+          <div>
+            <button onclick="confirmConfig()">Use This Configuration</button>
+          </div>
+        </td>
+
+        <!-- Middle Pane for the Enigma Machine visualization / interaction -->
+        <td class="middle pane">
+          <div
+            id="middleOverlay"
+            class="columnOverlay"
+            style="display: none"
+          ></div>
+
+          <!-- The following table is to represent the lampboard
+               as organized on an enigma machine
+               (similar HTML layout as with the plugboard above)
+          -->
+          <table id="lampboard" disabled>
+            <tr>
+              <td>Q</td>
+              <td>W</td>
+              <td>E</td>
+              <td>R</td>
+              <td>T</td>
+              <td>Z</td>
+              <td>U</td>
+              <td>I</td>
+              <td>O</td>
+            </tr>
+            <tr>
+              <td>A</td>
+              <td>S</td>
+              <td>D</td>
+              <td>F</td>
+              <td>G</td>
+              <td>H</td>
+              <td>J</td>
+              <td>K</td>
+            </tr>
+            <tr>
+              <td>P</td>
+              <td>Y</td>
+              <td>X</td>
+              <td>C</td>
+              <td>V</td>
+              <td>B</td>
+              <td>N</td>
+              <td>M</td>
+              <td>L</td>
+            </tr>
+          </table>
+
+          <!-- The following textareas are for entering and displaying user input. -->
+          <br />
+          <div style="text-align: center">
+            <textarea id="inText" onkeydown="keydown(event)"></textarea>
+            <!-- Plaintext Input -->
+            <textarea id="outText" readonly></textarea>
+            <!-- Encoded Output -->
+          </div>
+
+          <br />
+          <div style="text-align: center">
+            <button onclick="reset()">RESET</button>
+            <button onclick="saveState()">Save Message!</button>
+          </div>
+        </td>
+
+        <!-- Right Pane for holding previously saved messages -->
+        <td class="right pane">
+          <div style="overflow-y: scroll; overflow-x: hidden; height: 100%">
+            <!-- Each entry in this pane is a table
+                 holding message and config data
+            -->
+            <table class="savedMessage">
+              <tr>
+                <td>
+                  <!-- To populate with ring settings from the DB -->
+                  <b>!! Ring Settings</b>
+                </td>
+                <td>
+                  <b><u>Ciphertext</u></b>
+                </td>
+                <td>
+                  <b><u>Plaintext</u></b>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <!-- To populate with rotor settings from the DB -->
+                  <b>!! Rotor Settings</b>
+                </td>
+                <!-- Ciphertest message -->
+                <td>
+                  Ciphertext of some previous message from the user that's
+                  really really long and they really typed a whole report here
+                  huh? That's wild.
+                </td>
+                <!-- Plaintext message -->
+                <td class="savedPlaintext">
+                  Plaintext of some previous message from the user that's really
+                  really long and they really typed a whole report here huh?
+                  That's wild.
+                </td>
+              </tr>
+              <tr>
+                <td colspan="3" style="text-align: left">
+                  <b><u>Plugboard Config:</u> </b>EX CG DF LM AO
+                </td>
+              </tr>
+            </table>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

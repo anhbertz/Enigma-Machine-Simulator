@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option optimize_for = SPEED;
+
+// Java settings. Ignored if compiled for a different language
+option java_multiple_files = true;
+option java_package = "com.cs506.t21.enigma_service_interface";
+
+// Defines the rotor to be used. Since users are only allowed to pick between
+// the rotors on the database, this will ensure consistency and prevent
+// errors when selecting a rotor.
+enum RotorType {
+  ROTOR_I = 0;
+  ROTOR_II = 1;
+  ROTOR_III = 2;
+}
+
+enum ReflectorType {
+  REFLECTOR_UKW_B = 0;
+  REFLECTOR_UKW_C = 1;
+}
+
+message RotorSettings {
+  RotorType type = 1;
+  uint32 start_position = 2;
+  uint32 ring_setting = 3;
+}
+
+message PlugboardSettings {
+  // Mappings are in the form: "AB CD EZ"
+  // meaning a <-> b, c <-> d, and e <-> z
+  // Order of letters does not matter.
+  string mappings = 1;
+}
+
+message ReflectorSettings {
+  // Reflector wiring. Length should be 26 characters
+  // only letters are allowed (a-z). case insensitive
+  ReflectorType type = 1;
+}

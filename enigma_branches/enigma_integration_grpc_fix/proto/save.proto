@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+import "enigma_interface.proto";
+
+message SaveMessgeData {
+    string plaintext_msg = 1;
+    string ciphertext_msg = 2;
+}

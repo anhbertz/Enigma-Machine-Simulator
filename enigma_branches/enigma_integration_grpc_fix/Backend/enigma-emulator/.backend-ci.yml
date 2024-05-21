@@ -1,0 +1,58 @@
+stages:
+  - .pre
+  - build
+  - test
+
+.backend-pipeline:
+  image: ubuntu:22.04
+  before_script:
+    - apt-get update
+    - apt-get upgrade -y
+    - apt-get install -y openjdk-17-jdk openjdk-17-jre
+    - apt-get install -y protobuf-compiler
+    - export JAVA_HOME="/usr/lib/jvm/java-17-openjdk-amd64"
+    - export PATH=$JAVA_HOME/bin:$PATH
+    - cd Backend/enigma-emulator/
+  rules:
+    - if: $CI_COMMIT_BEFORE_SHA == "0000000000000000000000000000000000000000"
+      changes:
+        compare_to: 'refs/heads/main'
+        paths:
+          - Backend/**.{java, pom}
+    - if: $CI_PIPELINE_SOURCE == "push"
+      changes:
+        - "Backend/**/*.{java, pom}"
+    - when: never
+  
+Lint:
+  extends: .backend-pipeline
+  stage: .pre
+  script:
+    - ./mvnw clean validate
+
+Compile:
+  extends: .backend-pipeline
+  stage: build
+  script:
+    - ./mvnw clean compile
+  needs:
+    - Lint
+
+Unit-Tests:
+  extends: .backend-pipeline
+  stage: test
+  script:
+    - ./mvnw clean test
+  needs:
+    - Compile
+
+Coverage:
+  extends: .backend-pipeline
+  stage: test
+  script:
+    - ./mvnw clean verify
+  artifacts:
+    name: code-coverage-report
+    when: always
+    paths: 
+      - Backend/enigma-emulator/target/site/jacoco

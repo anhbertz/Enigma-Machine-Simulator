@@ -1,0 +1,250 @@
+/*
+   CSS File for enigma front-end
+   Authors:  Gabriel Friederichs, Nic Leighty
+   Version: 1.0 (Sprint 1)
+*/
+
+/* body style for any file that links this CSS */
+body {
+  padding: 1em 0.5em 0.5em 1em;
+  /* background-color: #FFA40E; old color trying to match enigma machine wood--may use somewhere later */
+  background-image: url("https://img.freepik.com/free-photo/brown-wooden-textured-flooring-background_53876-128536.jpg");
+}
+
+.pane {
+  width: 33.3%;
+  position: relative;
+}
+
+/* table style for any file that links this CSS */
+table {
+  text-align: center;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.columnOverlay {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.5);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.outline {
+  border: 2px solid red;
+}
+
+button {
+  font-size: 14pt;
+}
+
+.login-container {
+  width: 20%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.login-container button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.login-container button:hover {
+  background-color: #45a049;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+}
+
+.login-container {
+  width: 20%;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+}
+
+.login-container button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.login-container button:hover {
+  background-color: #45a049;
+}
+
+/* for the rotor area at the top part of the enigma interface */
+#rotorArea {
+  height: 60%;
+  text-align: center;
+  align-items: center;
+}
+
+/* for tds within the the rotor area */
+#rotorArea td {
+  background-color: white;
+  border: 3px solid black;
+  color: black;
+}
+
+/* for the div containing the rotors to select */
+#rotorSelection {
+  color: white;
+  display: inline-block;
+}
+
+/* for rotor (class) tables in the rotor selection area */
+table.rotor {
+  border-collapse: collapse;
+  display: inline-table;
+  height: 30vh;
+  width: 40px;
+}
+
+/* for the div containing the rotor display window */
+div#rotorDisplay {
+  color: black;
+  margin: auto;
+}
+
+/* for the div containing the ring settings area */
+div#ringSettings {
+  color: white;
+  display: inline-flex;
+}
+
+/* for each of the ring setting adjustment areas (middle and right rotor) */
+.ringSetting {
+  display: flex;
+  flex-direction: column;
+  padding: 0.35rem;
+}
+
+/* for the table constructing the rotor display */
+#rotorDisplay table {
+  background-color: black;
+  border: 1rem solid black;
+}
+
+/* for the tds in the rotor display table (each is for the display of one of the rotors in the machine) */
+#rotorDisplay td {
+  background-color: white;
+  width: 1.5rem;
+  height: 2rem;
+}
+
+.activeNumber {
+  background-color: gray;
+}
+
+textarea {
+  width: 40%;
+  height: 25vh;
+  font-size: 16pt;
+  background-color: white;
+  resize: none;
+}
+
+#lampboard, #plugboard {
+  border: 1px solid black;
+  border-collapse: collapse;
+  margin: auto;
+}
+
+/*TODO: Refactor to organize common CSS with lampboard*/
+#lampboard td {
+  background-color: black;
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  border: 3px solid white;
+  margin: auto;
+  color: #fff;
+  line-height: 30px;
+}
+
+/*TODO: Refactor to organize common CSS with lampboard*/
+#plugboard td {
+  background-color: black;
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  border-radius: 10%;
+  border: 3px solid white;
+  margin: auto;
+  color: #fff;
+  line-height: 30px;
+}
+
+.savedMessage {
+  width: 100%;
+  background-color: white;
+  border-collapse:separate;
+  border:solid black 1px;
+  border-radius:6px;
+}
+
+.savedPlaintext {
+  background-color: black;
+}
+
+.savedPlaintext:hover {
+  background-color: white;
+}
+
+/** Notes:
+    1. Offset so that it is centered relative to the screen and not its parent div.
+       Tried various configurations of divs, CSS, etc. and this is the best I could get, to get this centered properly on the screen.
+       Could use further evaluation later to discover a better solution, but it works. */

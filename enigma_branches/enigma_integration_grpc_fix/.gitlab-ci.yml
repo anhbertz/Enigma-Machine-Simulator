@@ -1,0 +1,14 @@
+include:
+  - local: '/Backend/enigma-emulator/.backend-ci.yml'
+
+# Dummy job to run when only pipeline file is updated
+# Avoids merge request getting stuck on checking pipeline
+# status.
+yaml-job:
+  stage: .pre
+  script:
+    - echo "Passed"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'push'
+      changes:
+        - /**.{yml, yaml}

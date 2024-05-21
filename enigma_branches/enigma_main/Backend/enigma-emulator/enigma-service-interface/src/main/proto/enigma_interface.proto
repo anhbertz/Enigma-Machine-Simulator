@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+import "component_settings.proto";
+
+option optimize_for = SPEED;
+
+// Java settings. Ignored if compiled for a different language
+option java_multiple_files = true;
+option java_package = "com.cs506.t21.enigma_service_interface";
+
+service EnigmaEmulator {
+  rpc Encrypt(EnigmaRequest) returns (EnigmaResponse) {}
+}
+
+message EnigmaRequest {
+
+  // Component settings
+  RotorSettings left_rotor = 1;
+  RotorSettings middle_rotor = 2;
+  RotorSettings right_rotor = 3;
+
+  PlugboardSettings plugboard = 4;
+  ReflectorSettings reflector = 5;
+  
+  
+  // Message to encrypt
+  string message = 6;
+}
+
+
+message EnigmaResponse {
+  // Empty string if no errors. Error description otherwise.
+  string error = 1;
+
+  string encrypted_message = 2;
+  repeated uint32 rotors_current_position = 3; // {left, middle, right}
+}
+
+// message SaveRequest {
+//   EnigmaRequest request = 1;
+//   string encrypted_message = 2;
+// }
+
+// message SaveResponse {
+
+// }
+
+
+// message LoadRequest {
+
+// }
+
+// message LoadResponse {
+
+// }
